@@ -9,8 +9,10 @@
     "author": "kolorafa",
     "contributors": [],
     "dependencies": {
-        "express": "^4.16.3"
-    }, "scripts":{
-"start":"node main.js"}
-
+        "express": "^4.16.3",
+        "graceful-fs": "^4.1.11"
+    },
+    "scripts": {
+        "start": "node main.js"
+    }
 }

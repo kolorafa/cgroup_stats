@@ -8,7 +8,7 @@ const CPUCgroupStat = require('./CPUCgroupStat.js');
 
 const DS = '/';
 const cgroupCpuFolder = '/sys/fs/cgroup/cpu';
-const fs = require('fs');
+const fs = require('graceful-fs');
 let stats = {};
 let handleCgroup = (path) => {
     if (fs.lstatSync(path + DS + 'cpuacct.usage').isFile()) {
