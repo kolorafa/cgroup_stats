@@ -49,7 +49,7 @@ CPUCgroupStat.prototype.update = async function () {
             that.time = new Date().getTime();
             let previous = that.previous;
             that.previous = value;
-            that.usage = ((value - previous) / 1000000) / (that.time - prevtime);
+            that.usage = ((value - previous) / 10000) / (that.time - prevtime);
             that.history.push(that.usage);
             if (that.history.length > 5) {
                 that.history.shift();
