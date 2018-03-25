@@ -4,29 +4,40 @@
         <script src="jquery.sparkline.min.js"></script>
         <script>
             $(() => {
-                $.getJSON('/api/v1/list_users', (data) => {
-                    data.cpuUsers.forEach((val) => {
-                        var template = $("<tr><td><span class='label'></span></td><td class='td-sparkl'><span class='sparkl'></span></td><td><span class='value'></span>%</td></tr>");
-                        $("#list").append(template);
-                        $('.label', template).html(val + ' ');
-                        var graph = $('.sparkl', template);
-                        var value = $('.value', template);
-                        var values = [];
-                        var update = () => {
-                            $.getJSON('/api/v1/get_user_usage/' + val, (ret) => {
-                                var tmp = Math.round(ret.cpuUsagePercent * 100) / 100;
-                                values.push(tmp);
-                                value.html(tmp);
-                                if (values.length > 30) {
-                                    values.shift();
-                                }
-                                graph.sparkline(values, {width: values.length * 2, tooltipSuffix: ' % cpu'});
-                                window.setTimeout(update, 1000);
-                            });
-                        };
-                        update();
+                var handleUser = (val) => {
+                    var template = $("<tr><td><span class='label'></span></td><td class='td-sparkl'><span class='sparkl'></span></td><td><span class='value'></span>%</td></tr>");
+                    $("#list").append(template);
+                    $('.label', template).html($("<a href='?user=" + val + "'>" + val + "</a>"));
+                    var graph = $('.sparkl', template);
+                    var value = $('.value', template);
+                    var values = [];
+                    var update = () => {
+                        $.getJSON('/api/v1/get_user_usage/' + val, (ret) => {
+                            var tmp = Math.round(ret.cpuUsagePercent * 100) / 100;
+                            values.push(tmp);
+                            value.html(tmp);
+                            if (values.length > 30) {
+                                values.shift();
+                            }
+                            graph.sparkline(values, {width: values.length * 2, tooltipSuffix: ' % cpu'});
+                            window.setTimeout(update, 1000);
+                        });
+                    };
+                    update();
+
+                };
+
+                var url = new URL(location.href);
+                var c = url.searchParams.get("user");
+                if (c) {
+                    handleUser(c);
+                } else {
+                    $.getJSON('/api/v1/list_users', (data) => {
+                        data.cpuUsers.forEach((val) => {
+                            handleUser(val);
+                        });
                     });
-                });
+                }
             });
         </script>
         <style>
