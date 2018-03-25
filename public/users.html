@@ -6,13 +6,12 @@
             $(() => {
                 $.getJSON('/api/v1/list_users', (data) => {
                     data.cpuUsers.forEach((val) => {
-                        var template = $("<tr><td><span class='label'></span><span class='sparkl'></span></td><td><span class='value'></span>%</td></tr>");
+                        var template = $("<tr><td><span class='label'></span></td><td class='td-sparkl'><span class='sparkl'></span></td><td><span class='value'></span>%</td></tr>");
                         $("#list").append(template);
                         $('.label', template).html(val + ' ');
                         var graph = $('.sparkl', template);
                         var value = $('.value', template);
                         var values = [];
-                        console.log(val);
                         var update = () => {
                             $.getJSON('/api/v1/get_user_usage/' + val, (ret) => {
                                 var tmp = Math.round(ret.cpuUsagePercent * 100) / 100;
@@ -27,14 +26,16 @@
                         };
                         update();
                     });
-//                    console.log(data);
                 });
-//                $('#stat_').sparkline([0, 1, 2, 0, 2], {width: 10 * 2, tooltipSuffix: ' % cpu'});
             });
         </script>
         <style>
             #list td {
                 border-bottom: 1px black solid;
+            }
+            .td-sparkl {
+                text-align: right;
+                width: 65px;
             }
         </style>
     </head>
