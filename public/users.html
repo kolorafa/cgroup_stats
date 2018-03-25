@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+        <script src="jquery.sparkline.min.js"></script>
+        <script>
+            $(() => {
+                $.getJSON('/api/v1/list_users', (data) => {
+                    data.cpuUsers.forEach((val) => {
+                        var template = $("<tr><td><span class='label'></span><span class='sparkl'></span></td><td><span class='value'></span>%</td></tr>");
+                        $("#list").append(template);
+                        $('.label', template).html(val + ' ');
+                        var graph = $('.sparkl', template);
+                        var value = $('.value', template);
+                        var values = [];
+                        console.log(val);
+                        var update = () => {
+                            $.getJSON('/api/v1/get_user_usage/' + val, (ret) => {
+                                var tmp = Math.round(ret.cpuUsagePercent * 100) / 100;
+                                values.push(tmp);
+                                value.html(tmp);
+                                if (values.length > 30) {
+                                    values.shift();
+                                }
+                                graph.sparkline(values, {width: values.length * 2, tooltipSuffix: ' % cpu'});
+                                window.setTimeout(update, 1000);
+                            });
+                        };
+                        update();
+                    });
+//                    console.log(data);
+                });
+//                $('#stat_').sparkline([0, 1, 2, 0, 2], {width: 10 * 2, tooltipSuffix: ' % cpu'});
+            });
+        </script>
+        <style>
+            #list td {
+                border-bottom: 1px black solid;
+            }
+        </style>
+    </head>
+    <body>
+        <table id="list">
+
+        </table>
+    </body>
+</html>

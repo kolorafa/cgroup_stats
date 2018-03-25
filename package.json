@@ -1,0 +1,16 @@
+{
+    "name": "cgroup_stats",
+    "version": "1.0.0",
+    "keywords": [
+        "util",
+        "functional",
+        "server"
+    ],
+    "author": "kolorafa",
+    "contributors": [],
+    "dependencies": {
+        "express": "^4.16.3"
+    }, "scripts":{
+"start":"node main.js"}
+
+}
