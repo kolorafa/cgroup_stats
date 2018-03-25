@@ -13,25 +13,24 @@ function CPUCgroupStat(path) {
 
     this.readUsage = function () {
         let that = this;
-        return new Promise(
-                function (resolve, reject) {
-                    fs.open(that.path + DS + 'cpuacct.usage', 'r', function (err, fileToRead) {
+        return new Promise(function (resolve, reject) {
+            fs.open(that.path + DS + 'cpuacct.usage', 'r', function (err, fileToRead) {
+                if (!err) {
+                    fs.readFile(fileToRead, {encoding: 'utf-8'}, function (err, data) {
                         if (!err) {
-                            fs.readFile(fileToRead, {encoding: 'utf-8'}, function (err, data) {
-                                if (!err) {
-                                    fs.close(fileToRead, function () {});
-                                    resolve(data);
-                                } else {
-                                    fs.close(fileToRead, function () {});
-                                    console.log(err);
-                                    reject(err);
-                                }
-                            });
+                            fs.close(fileToRead, function () {});
+                            resolve(data);
                         } else {
+                            fs.close(fileToRead, function () {});
                             console.log(err);
+                            reject(err);
                         }
                     });
-                });
+                } else {
+                    console.log(err);
+                }
+            });
+        });
 
     }
 
@@ -42,17 +41,24 @@ function CPUCgroupStat(path) {
     });
 }
 // class methods
-CPUCgroupStat.prototype.update = function () {
-    this.readUsage().then(value => {
-        let prevtime = this.time;
-        this.time = this.time = new Date().getTime();
-        let previous = this.previous;
-        this.previous = value;
-        this.usage = ((value - previous) / 10000000) / (this.time / prevtime);
-        this.history.push(this.usage);
-        if (this.history.length > 5) {
-            this.history.shift();
-        }
+CPUCgroupStat.prototype.update = async function () {
+    let that = this;
+    return new Promise(function (resolve, reject) {
+        that.readUsage().then(value => {
+            let prevtime = that.time;
+            that.time = that.time = new Date().getTime();
+            let previous = that.previous;
+            that.previous = value;
+            that.usage = ((value - previous) / 10000000) / (that.time / prevtime);
+            that.history.push(that.usage);
+            if (that.history.length > 5) {
+                that.history.shift();
+            }
+            resolve();
+        }).catch((err) => {
+            console.log("UPDATE FAIL: ", err);
+            reject(err);
+        });
     });
 };
 

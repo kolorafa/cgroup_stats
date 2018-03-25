@@ -35,12 +35,10 @@ let scanRecursive = (path) => {
     });
 };
 scanRecursive(cgroupCpuFolder);
-let updateUsage = () => {
+let updateUsage = async () => {
     for (let key in stats) {
-        stats[key].update();
+        await stats[key].update();
     }
-    ;
-//    console.log(stats["/sys/fs/cgroup/cpu/user_test"].getUsage());
 };
 setInterval(updateUsage, 1000);
 const express = require('express');
