@@ -46,7 +46,7 @@ CPUCgroupStat.prototype.update = async function () {
     return new Promise(function (resolve, reject) {
         that.readUsage().then(value => {
             let prevtime = that.time;
-            that.time = that.time = new Date().getTime();
+            that.time = new Date().getTime();
             let previous = that.previous;
             that.previous = value;
             that.usage = ((value - previous) / 10000000) / (that.time / prevtime);
