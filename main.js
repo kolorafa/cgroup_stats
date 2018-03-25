@@ -39,8 +39,9 @@ let updateUsage = async () => {
     for (let key in stats) {
         await stats[key].update();
     }
+//    console.log(stats["/sys/fs/cgroup/cpu/user_test"].getUsage());
 };
-setInterval(updateUsage, 1000);
+setInterval(updateUsage, 2000);
 const express = require('express');
 const app = express();
 //app.use((request, response, next) => {
