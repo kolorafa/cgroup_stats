@@ -19,7 +19,7 @@
                             if (values.length > 30) {
                                 values.shift();
                             }
-                            graph.sparkline(values, {width: values.length * 2, tooltipSuffix: ' % cpu'});
+                            graph.sparkline(values, {width: values.length * 4, tooltipSuffix: ' % cpu'});
                             window.setTimeout(update, 2000);
                         });
                     };
@@ -48,7 +48,10 @@
             }
             .td-sparkl {
                 text-align: right;
-                width: 65px;
+                width: 130px;
+            }
+            #list {
+                font-size: xx-large;
             }
         </style>
     </head>
