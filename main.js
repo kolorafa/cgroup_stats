@@ -101,5 +101,8 @@ app.get('/api/v1/list_users', (request, response) => {
 
 app.use(express.static('public'));
 
-app.listen(7465);
+let PORT = 7465;
+app.listen(PORT);
+
+console.log("HTTP server running at: " + PORT + "\n");
 
